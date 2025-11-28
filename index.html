@@ -1,37 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💰 Premium Savings Tracker</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savings Pro</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container" id="login-container">
-  <h1>💰 Savings Tracker Login</h1>
-  <input type="text" id="username" placeholder="Username" />
-  <input type="password" id="password" placeholder="Password" />
-  <button id="login-btn">Login / Create Account</button>
-  <p id="login-msg"></p>
+
+<div id="authContainer" class="centerBox hidden">
+    <h2 id="authTitle">Login</h2>
+
+    <div class="peekMan">
+        <img id="peekImage" src="https://github.com/codexd007/paid/blob/main/wibu.png">
+    </div>
+
+    <input id="authUsername" type="text" placeholder="Username">
+    <div class="passwordWarp">
+        <input id="authPassword" type="password" placeholder="Password" oninput="closeEyes()">
+    </div>
+
+    <input id="authGoal" class="hidden" type="number" placeholder="Monthly Goal (25000)">
+    <button id="authBtn" onclick="authAction()">Login</button>
+
+    <p id="switchText" onclick="switchAuth()">Create New Account?</p>
 </div>
 
-<div class="container" id="dashboard-container" style="display:none;">
-  <h1>💰 Premium Savings Tracker</h1>
-  <div id="today-target">Loading today's target...</div>
-  <input type="number" id="amount" placeholder="Enter amount saved today" />
-  <button id="save-btn">Add Savings</button>
-  <div id="total">Total Saved: Rs 0</div>
 
-  <div id="progress-container">
-    <div id="progress">0%</div>
-  </div>
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+    <header>
+        <h2 id="welcomeUser"></h2>
+        <button onclick="logout()" class="logoutBtn">Logout</button>
+    </header>
 
-  <div id="calendar"></div>
+    <div class="goalBox">
+        <p>Monthly Goal: <span id="monthlyGoal"></span></p>
+        <p>Total Saved: <span id="totalSaved"></span></p>
+        <div class="progressBar">
+            <div id="progressFill"></div>
+        </div>
+    </div>
 
-  <div id="controls">
-    <button id="reset-btn">Reset Month</button>
-    <button id="mode-btn">Light/Dark Mode</button>
-  </div>
+    <div class="dailyBox">
+        <h3>Today's Target</h3>
+        <h1 id="todayTarget"></h1>
+        <input id="addAmount" type="number" placeholder="Enter amount you saved today">
+        <button onclick="addToday()">Add</button>
+    </div>
+
+    <h3 class="calTitle">Calendar</h3>
+    <div id="calendar"></div>
 </div>
 
 <script src="script.js"></script>

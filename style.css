@@ -1,93 +1,109 @@
-/* General Styles */
 body {
-  font-family: 'Arial', sans-serif;
-  margin:0;
-  padding:0;
-  background:#f2f2f2;
-  transition:0.3s;
-  color:#333;
-}
-body.dark { background:#121212; color:#fff; }
-
-.container {
-  max-width: 700px;
-  margin:auto;
-  padding:20px;
-  text-align:center;
-  animation: fadeIn 1s;
+    margin: 0;
+    background: linear-gradient(135deg,#0a0f27,#111831,#1a2448);
+    font-family: Poppins, sans-serif;
+    color: #fff;
 }
 
-h1 { color:#008000; margin-bottom:10px; }
-
-input, button {
-  padding:10px;
-  margin:5px;
-  border-radius:8px;
-  border:none;
-  font-size:16px;
+/* center box */
+.centerBox {
+    width: 90%;
+    max-width: 340px;
+    margin: 60px auto;
+    background: rgba(255,255,255,0.05);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px #00e1ff80;
+    animation: fadeIn 0.6s ease;
 }
 
-button { background:#4CAF50; color:#fff; cursor:pointer; transition:0.3s; }
-button:hover { background:#45a049; }
-
-#today-target { font-size:24px; margin:10px 0; }
-#total { font-size:20px; margin:10px 0; }
-
-#progress-container {
-  width:100%;
-  background:#ddd;
-  border-radius:20px;
-  overflow:hidden;
-  margin:20px 0;
-}
-#progress {
-  height:30px;
-  width:0%;
-  background:#4CAF50;
-  text-align:center;
-  color:white;
-  line-height:30px;
-  transition:0.5s;
+/* form style */
+input {
+    width: 94%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 15px;
 }
 
+/* neon button */
+button {
+    width: 100%;
+    padding: 12px;
+    background: #00e1ff;
+    color: #000;
+    border: none;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+button:hover {
+    background: #00ffee;
+}
+
+/* peeking animation */
+.peekMan {
+    text-align: center;
+    margin-bottom: 15px;
+}
+.peekMan img {
+    width: 90px;
+    transition: 0.3s;
+}
+
+/* calendar */
 #calendar {
-  display:flex;
-  flex-wrap: wrap;
-  justify-content:center;
-  margin-top:10px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
 }
-.day {
-  width:45px;
-  height:45px;
-  margin:5px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:50%;
-  background:#eee;
-  cursor:pointer;
-  transition:0.3s;
+#calendar div {
+    padding: 10px;
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
 }
-.day.saved { background:#4CAF50; color:#fff; font-weight:bold; }
-
-#controls { margin:20px 0; }
-#mode-btn { background:#333; color:#fff; }
-#mode-btn:hover { background:#555; }
-
-.coins {
-  position:fixed;
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  background:gold;
-  animation: fall 2s linear forwards;
-}
-@keyframes fall {
-  0% { transform: translateY(0) scale(1); opacity:1;}
-  100% { transform: translateY(600px) scale(0.5); opacity:0;}
+.savedDay {
+    background: #00ffaa;
+    color: #000;
+    font-weight: bold;
 }
 
-@keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
+/* dashboard */
+.goalBox, .dailyBox {
+    margin: 15px;
+    padding: 20px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 15px;
+    box-shadow: 0 0 10px #00e1ff55;
+}
+
+.progressBar {
+    width: 100%;
+    height: 10px;
+    background: #0004;
+    border-radius: 10px;
+}
+#progressFill {
+    height: 10px;
+    background: #00ffaa;
+    width: 0%;
+    border-radius: 10px;
+    transition: 0.6s ease;
+}
+
+.hidden { display: none; }
+
+.logoutBtn {
+    background: red;
+    padding: 6px 14px;
+    color: #fff;
+    margin-left: auto;
 }
