@@ -1,57 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Savings Pro</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Modern Login — Savings App</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <main class="wrap">
+    <section class="hero">
+      <img class="hero-art" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f636.png" alt="illustration">
+    </section>
 
-<div id="authContainer" class="centerBox hidden">
-    <h2 id="authTitle">Login</h2>
-
-    <div class="peekMan">
-        <img id="peekImage" src="https://github.com/codexd007/paid/blob/main/wibu.png">
-    </div>
-
-    <input id="authUsername" type="text" placeholder="Username">
-    <div class="passwordWarp">
-        <input id="authPassword" type="password" placeholder="Password" oninput="closeEyes()">
-    </div>
-
-    <input id="authGoal" class="hidden" type="number" placeholder="Monthly Goal (25000)">
-    <button id="authBtn" onclick="authAction()">Login</button>
-
-    <p id="switchText" onclick="switchAuth()">Create New Account?</p>
-</div>
-
-
-<!-- DASHBOARD -->
-<div id="dashboard" class="hidden">
-    <header>
-        <h2 id="welcomeUser"></h2>
-        <button onclick="logout()" class="logoutBtn">Logout</button>
-    </header>
-
-    <div class="goalBox">
-        <p>Monthly Goal: <span id="monthlyGoal"></span></p>
-        <p>Total Saved: <span id="totalSaved"></span></p>
-        <div class="progressBar">
-            <div id="progressFill"></div>
+    <section class="card-wrap">
+      <div class="card">
+        <div class="brand">
+          <div class="logo"></div>
+          <h1>Welcome back!</h1>
+          <p class="muted">Sign in to continue to your Savings Tracker</p>
         </div>
-    </div>
 
-    <div class="dailyBox">
-        <h3>Today's Target</h3>
-        <h1 id="todayTarget"></h1>
-        <input id="addAmount" type="number" placeholder="Enter amount you saved today">
-        <button onclick="addToday()">Add</button>
-    </div>
+        <div class="character-area">
+          <!-- Using reliable Wikimedia emoji PNGs -->
+          <img id="character" class="character" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f603.png" alt="character">
+        </div>
 
-    <h3 class="calTitle">Calendar</h3>
-    <div id="calendar"></div>
-</div>
+        <form id="loginForm" class="form" onsubmit="return false;">
+          <label class="field">
+            <span>Username</span>
+            <input id="username" type="text" autocomplete="username" placeholder="Choose or enter username" />
+          </label>
+
+          <label class="field">
+            <span>Password</span>
+            <div class="pw-row">
+              <input id="password" type="password" autocomplete="current-password" placeholder="Enter password" />
+              <button id="togglePw" type="button" class="icon-btn" title="Show/Hide password"></button>
+            </div>
+          </label>
+
+          <div class="actions">
+            <button id="loginBtn" class="btn primary">Login / Create account</button>
+            <button id="quickDemo" class="btn ghost" type="button">Demo account</button>
+          </div>
+
+          <p id="msg" class="msg"></p>
+        </form>
+
+        <div class="footer-note muted">By continuing you agree to saving responsibly </div>
+      </div>
+    </section>
+  </main>
 
 <script src="script.js"></script>
 </body>

@@ -1,109 +1,114 @@
-let mode = "login";
-let users = JSON.parse(localStorage.getItem("users") || "{}");
-let currentUser = localStorage.getItem("currentUser");
+// modern login interactions + multi-user localStorage
+const usernameEl = document.getElementById('username');
+const passwordEl = document.getElementById('password');
+const loginBtn = document.getElementById('loginBtn');
+const quickDemoBtn = document.getElementById('quickDemo');
+const msgEl = document.getElementById('msg');
+const character = document.getElementById('character');
+const togglePw = document.getElementById('togglePw');
 
-window.onload = () => {
-    if (currentUser && users[currentUser]) openDashboard(currentUser);
-    else document.getElementById("authContainer").classList.remove("hidden");
-};
+const CHAR_SMILE = "https://upload.wikimedia.org/wikipedia/commons/2/21/Smiling_Face_with_Open_Mouth_Emoji.png";
+const CHAR_EYE_COVER = "https://upload.wikimedia.org/wikipedia/commons/2/2e/Face_with_no_mouth_emoji.png";
+const CHAR_WINK = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Emoji_u1f609.svg/240px-Emoji_u1f609.svg.png";
 
-function switchAuth() {
-    if (mode === "login") {
-        mode = "signup";
-        authTitle.innerHTML = "Create Account";
-        authBtn.innerHTML = "Create";
-        authGoal.classList.remove("hidden");
-        switchText.innerHTML = "Already have account? Login";
+// helper: load users
+function loadUsers(){ return JSON.parse(localStorage.getItem('sav_users')||'{}'); }
+function saveUsers(u){ localStorage.setItem('sav_users', JSON.stringify(u)); }
+
+// character react functions
+function setSmile(){ character.src = CHAR_SMILE; character.classList.add('ch-smile'); setTimeout(()=>character.classList.remove('ch-smile'),600); }
+function setPeek(){ character.src = CHAR_EYE_COVER; character.classList.add('ch-peek'); setTimeout(()=>character.classList.remove('ch-peek'),600); }
+function setWink(){ character.src = CHAR_WINK; character.classList.add('ch-shy'); setTimeout(()=>character.classList.remove('ch-shy'),700); }
+
+// input listeners
+usernameEl.addEventListener('input', e=>{
+  if(e.target.value.trim().length) setSmile();
+});
+passwordEl.addEventListener('input', e=>{
+  if(e.target.value.length) setPeek();
+});
+
+// toggle show/hide password with char reaction
+let pwVisible = false;
+togglePw.addEventListener('click', ()=>{
+  pwVisible = !pwVisible;
+  passwordEl.type = pwVisible ? 'text' : 'password';
+  togglePw.textContent = pwVisible ? '' : '';
+  // when showing password - wink the character
+  setWink();
+});
+
+// login / create
+loginBtn.addEventListener('click', ()=>{
+  const u = usernameEl.value.trim();
+  const p = passwordEl.value;
+  msgEl.textContent = '';
+  if(!u || !p){ msgEl.textContent = 'Please enter username and password'; return; }
+
+  let users = loadUsers();
+  if(users[u]){
+    // user exists -> authenticate
+    if(users[u].password === p){
+      msgEl.style.color = 'green';
+      msgEl.textContent = 'Login successful — opening...';
+      setTimeout(()=> {
+        setWink();
+        openDashboard(u);
+      }, 450);
     } else {
-        mode = "login";
-        authTitle.innerHTML = "Login";
-        authBtn.innerHTML = "Login";
-        authGoal.classList.add("hidden");
-        switchText.innerHTML = "Create New Account?";
+      msgEl.style.color = '#d33';
+      msgEl.textContent = 'Incorrect password';
+      setPeek();
     }
+  } else {
+    // create new user (prompt monthly goal)
+    let goal = prompt("Create account — set your monthly saving goal (e.g., 25000):", "25000");
+    if(!goal) { msgEl.textContent='Account creation cancelled'; return; }
+    users[u] = { password: p, monthlyGoal: parseInt(goal)||25000, saved: { total:0, days:[] } };
+    saveUsers(users);
+    msgEl.style.color = 'green';
+    msgEl.textContent = 'Account created — opening...';
+    setTimeout(()=> {
+      setSmile();
+      openDashboard(u);
+    }, 450);
+  }
+});
+
+// Demo quick account (preload example)
+quickDemoBtn.addEventListener('click', ()=>{
+  const demo = 'demouser';
+  const demoP = 'demo';
+  let users = loadUsers();
+  if(!users[demo]){
+    users[demo] = { password: demoP, monthlyGoal:25000, saved:{total:0,days:[] } };
+    saveUsers(users);
+  }
+  usernameEl.value = demo;
+  passwordEl.value = demoP;
+  setSmile();
+  setTimeout(()=> loginBtn.click(), 350);
+});
+
+// fake open dashboard - here we just show a success modal (replace with real route)
+function openDashboard(username){
+  // For this demo we do not navigate away. Show small success animation and message.
+  document.body.style.transition = 'filter .4s';
+  document.body.style.filter = 'blur(2px) saturate(1.05)';
+  const success = document.createElement('div');
+  success.style = "position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:linear-gradient(90deg,#7ef0b1,#3ad59f);padding:24px;border-radius:14px;box-shadow:0 18px 44px rgba(10,20,30,0.18);font-weight:700;color:#023;";
+  success.innerHTML = `Welcome, ${username}! <br> Dashboard would open here.`;
+  document.body.appendChild(success);
+  setTimeout(()=> {
+    document.body.style.filter = '';
+    success.remove();
+    // Reset form safely
+    usernameEl.value=''; passwordEl.value='';
+    setSmile();
+  }, 1400);
 }
 
-function authAction() {
-    let user = authUsername.value;
-    let pass = authPassword.value;
-
-    if (!user || !pass) return alert("Enter full details");
-
-    if (mode === "signup") {
-        let goal = Number(authGoal.value);
-        users[user] = { pass, goal, saved: {}, totalSaved: 0 };
-        localStorage.setItem("users", JSON.stringify(users));
-        alert("Account Created!");
-        switchAuth();
-    } else {
-        if (!users[user]) return alert("No account found!");
-        if (users[user].pass !== pass) return alert("Wrong password!");
-
-        localStorage.setItem("currentUser", user);
-        openDashboard(user);
-    }
-}
-
-function openDashboard(user) {
-    document.getElementById("authContainer").classList.add("hidden");
-    document.getElementById("dashboard").classList.remove("hidden");
-
-    let u = users[user];
-
-    welcomeUser.innerHTML = "Welcome, " + user;
-    monthlyGoal.innerHTML = u.goal;
-    totalSaved.innerHTML = u.totalSaved;
-
-    updateProgress(user);
-    generateCalendar(user);
-    todayTarget.innerHTML = Math.round(u.goal / 30);
-}
-
-function addToday() {
-    let amt = Number(addAmount.value);
-    if (!amt) return;
-
-    let user = currentUser;
-    let u = users[user];
-    let today = new Date().getDate();
-
-    u.saved[today] = (u.saved[today] || 0) + amt;
-    u.totalSaved += amt;
-
-    localStorage.setItem("users", JSON.stringify(users));
-
-    totalSaved.innerHTML = u.totalSaved;
-    updateProgress(user);
-    generateCalendar(user);
-
-    addAmount.value = "";
-}
-
-function generateCalendar(user) {
-    let u = users[user];
-    calendar.innerHTML = "";
-    let days = new Date().getDate();
-
-    for (let i = 1; i <= 31; i++) {
-        let day = document.createElement("div");
-        day.innerHTML = i;
-
-        if (u.saved[i]) day.classList.add("savedDay");
-        calendar.appendChild(day);
-    }
-}
-
-function updateProgress(user) {
-    let u = users[user];
-    let percent = (u.totalSaved / u.goal) * 100;
-    progressFill.style.width = percent + "%";
-}
-
-function logout() {
-    localStorage.removeItem("currentUser");
-    location.reload();
-}
-
-function closeEyes() {
-    peekImage.style.opacity = "0.1";
-}
+// small accessibility: enter triggers login
+[usernameEl,passwordEl].forEach(el=>el.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') loginBtn.click();
+}));
