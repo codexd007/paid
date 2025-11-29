@@ -1,57 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Modern Login — Savings App</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Advanced Savings Tracker — Premium</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="wrap">
-    <section class="hero">
-      <img class="hero-art" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f636.png" alt="illustration">
+  <!-- Login / Register -->
+  <main class="app">
+    <section class="left-hero">
+      <div class="hero-illustration">
+        <!-- big colorful shapes to mimic image on left -->
+        <div class="shape orange"></div>
+        <div class="shape purple"></div>
+        <div class="shape black"></div>
+        <div class="shape yellow"></div>
+      </div>
+      <h2>Make saving fun — reach your goal</h2>
+      <p class="muted">Balanced daily targets, streaks, badges and visual progress.</p>
     </section>
 
-    <section class="card-wrap">
-      <div class="card">
+    <section class="auth-card" id="auth-card">
+      <div class="auth-inner">
         <div class="brand">
           <div class="logo"></div>
-          <h1>Welcome back!</h1>
-          <p class="muted">Sign in to continue to your Savings Tracker</p>
+          <h1>Welcome</h1>
         </div>
 
-        <div class="character-area">
-          <!-- Using reliable Wikimedia emoji PNGs -->
-          <img id="character" class="character" src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f603.png" alt="character">
+        <div class="character-wrap">
+          <!-- character image reacts: default -> neutral, typing -> eyesclosed, happy -> smile -->
+          <img id="charImg" alt="character" src="https://upload.wikimedia.org/wikipedia/commons/2/21/Smiling_Face_with_Open_Mouth_Emoji.png">
         </div>
 
-        <form id="loginForm" class="form" onsubmit="return false;">
-          <label class="field">
-            <span>Username</span>
-            <input id="username" type="text" autocomplete="username" placeholder="Choose or enter username" />
-          </label>
+        <input id="username" placeholder="Username" autocomplete="username" />
+        <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
 
-          <label class="field">
-            <span>Password</span>
-            <div class="pw-row">
-              <input id="password" type="password" autocomplete="current-password" placeholder="Enter password" />
-              <button id="togglePw" type="button" class="icon-btn" title="Show/Hide password"></button>
-            </div>
-          </label>
+        <div class="auth-actions">
+          <button id="loginBtn" class="btn primary">Log in</button>
+          <button id="registerBtn" class="btn ghost">Create account</button>
+        </div>
 
-          <div class="actions">
-            <button id="loginBtn" class="btn primary">Login / Create account</button>
-            <button id="quickDemo" class="btn ghost" type="button">Demo account</button>
-          </div>
+        <p id="authMsg" class="muted small"></p>
 
-          <p id="msg" class="msg"></p>
-        </form>
-
-        <div class="footer-note muted">By continuing you agree to saving responsibly </div>
+        <div class="footer-note small muted">You can test locally without server — app will use localStorage if server not found.</div>
       </div>
     </section>
+
+    <!-- Dashboard (hidden initially) -->
+    <section class="dashboard" id="dashboard" style="display:none;">
+      <header class="dash-header">
+        <div class="dash-left">
+          <h2 id="welcomeTxt">Hello</h2>
+          <div class="small muted" id="goalTxt">Monthly goal: Rs <span id="goalValue">25000</span></div>
+        </div>
+        <div class="dash-right">
+          <button id="modeToggle" class="btn small"></button>
+          <button id="logoutBtn" class="btn small ghost">Logout</button>
+        </div>
+      </header>
+
+      <section class="top-cards">
+        <div class="card progress-card">
+          <div class="card-head">
+            <h3>Progress</h3>
+            <div class="muted small">Monthly</div>
+          </div>
+          <div class="progress-visual">
+            <div id="progressBar" class="progress-fill" style="width:0%">0%</div>
+          </div>
+          <div class="progress-stats">
+            <div>Total: Rs <span id="totalSaved">0</span></div>
+            <div>Remaining: Rs <span id="remainingAmt">25000</span></div>
+          </div>
+          <canvas id="progressChart" height="80"></canvas>
+        </div>
+
+        <div class="card save-card">
+          <h3>Add today's saving</h3>
+          <div class="save-controls">
+            <input id="saveInput" type="number" placeholder="Enter amount (e.g., 300)" />
+            <button id="saveBtn" class="btn primary">Add</button>
+          </div>
+          <div class="streak"> Streak: <span id="streakCount">0</span> days</div>
+        </div>
+      </section>
+
+      <section class="calendar-card card">
+        <h3>Calendar (this month)</h3>
+        <div id="calendarGrid" class="calendar-grid"></div>
+      </section>
+
+      <div id="badgeArea" class="badge-area"></div>
+    </section>
+
+    <!-- coin template container -->
+    <div id="coinLayer"></div>
+
   </main>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
